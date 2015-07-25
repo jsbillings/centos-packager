@@ -1,0 +1,116 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+import optparse
+import urlparse
+import urllib
+import requests
+
+from getpass import getpass
+
+from centos import CentOSUserCert
+from centos import defaults
+
+def download_cert(username, password, topurl=None, servercacert=None, uploadcacert=None):
+    if not topurl:
+        topurl = defaults.FAS_TOPURL
+
+    if not servercacert:
+        servercacert = defaults.SERVER_CA_CERT_FILE
+
+    if not uploadcacert:
+        uploadcacert = defaults.UPLOAD_CA_CERT_FILE
+
+    splittopurl = urlparse.urlsplit(topurl)
+
+    usercertpath = os.path.join(splittopurl.path, 'user/dogencert')
+    params = {'user_name': username, 'password': password, 'login':'Login' }
+
+    userspliturl = urlparse.SplitResult(splittopurl.scheme,
+                                        splittopurl.netloc,
+                                        usercertpath,
+                                        None,
+                                        None)
+
+    servercapath = os.path.join(splittopurl.path, 'centos-server-ca.cert')
+    servercaspliturl = urlparse.SplitResult(splittopurl.scheme,
+                                            splittopurl.netloc,
+                                            servercapath,
+                                            None,
+                                            None)
+
+    uploadcapath = os.path.join(splittopurl.path, 'centos-upload-ca.cert')
+    uploadcaspliturl = urlparse.SplitResult(splittopurl.scheme,
+                                            splittopurl.netloc,
+                                            uploadcapath,
+                                            None,
+                                            None)
+
+    userurl = urlparse.urlunsplit(userspliturl)
+    servercaurl = urlparse.urlunsplit(servercaspliturl)
+    uploadcaurl = urlparse.urlunsplit(uploadcaspliturl)
+
+
+    with open(os.path.expanduser(defaults.USER_CERT_FILE), 'w') as usercertfile:
+        r = requests.post(userurl, params=params, verify=False)
+        if r.status_code <= 400:
+            usercertfile.write(r.raw.read())
+        print os.path.expanduser(defaults.USER_CERT_FILE)
+
+    with open(os.path.expanduser(defaults.SERVER_CA_CERT_FILE), 'w') as servercacertfile:
+        r = requests.get(servercaurl, params=params, verify=False)
+        if r.status_code <= 400:
+            servercacertfile.write(r.raw.read())
+        print os.path.expanduser(defaults.SERVER_CA_CERT_FILE)
+
+    with open(os.path.expanduser(defaults.UPLOAD_CA_CERT_FILE), 'w') as uploadcacertfile:
+        r = requests.get(uploadcaurl, params=params, verify=False)
+        if r.status_code <= 400:
+            uploadcacertfile.write(r.raw.read())
+        print os.path.expanduser(defaults.UPLOAD_CA_CERT_FILE)
+
+def main(opts):
+
+    if not opts.certfile:
+        certfile = defaults.USER_CERT_FILE
+    else:
+        certfile = opts.certfile
+
+    if opts.username and not opts.verifycert:
+        username = opts.username
+    else:
+        try:
+            cert = CentOSUserCert(certfile)
+            username = cert.CN
+        except IOError, e:
+            print "{0}: {1}".format(os.path.expanduser(certfile), e.strerror)
+            exit(1)
+
+    if opts.verifycert:
+        if not cert.valid:
+            print "Your certificate is not valid"
+            sys.exit(1)
+        else:
+            print "Your certificate is valid"
+            sys.exit(0)
+
+    if opts.newcert:
+        password = getpass('FAS Password: ')
+        download_cert(username, password)
+
+if __name__ == '__main__':
+
+    parser = optparse.OptionParser(usage="%prog [OPTIONS] ")
+    parser.add_option('-u', '--username', action='store', dest='username',
+                     default=False, help="FAS Username.")
+    parser.add_option('-n', '--new-cert', action='store_true', dest='newcert',
+                     default=False, help="Generate a new Fedora Certificate.")
+    parser.add_option('-f', '--file', action='store', dest='certfile',
+                     default=None, help="Verify Certificate.")
+    parser.add_option('-v', '--verify-cert', action='store_true', dest='verifycert',
+                     default=False, help="Verify Certificate.")
+    opts,args = parser.parse_args()
+
+    main(opts)
