@@ -5,13 +5,13 @@ import os
 import sys
 import optparse
 import urlparse
-import urllib
 import requests
 
 from getpass import getpass
 
 from centos import CentOSUserCert
 from centos import defaults
+
 
 def download_cert(username, password, topurl=None, servercacert=None, uploadcacert=None):
     if not topurl:
@@ -26,7 +26,7 @@ def download_cert(username, password, topurl=None, servercacert=None, uploadcace
     splittopurl = urlparse.urlsplit(topurl)
 
     usercertpath = os.path.join(splittopurl.path, 'user/dogencert')
-    params = {'user_name': username, 'password': password, 'login':'Login' }
+    params = {'user_name': username, 'password': password, 'login': 'Login'}
 
     userspliturl = urlparse.SplitResult(splittopurl.scheme,
                                         splittopurl.netloc,
@@ -104,13 +104,13 @@ if __name__ == '__main__':
 
     parser = optparse.OptionParser(usage="%prog [OPTIONS] ")
     parser.add_option('-u', '--username', action='store', dest='username',
-                     default=False, help="FAS Username.")
+                      default=False, help="FAS Username.")
     parser.add_option('-n', '--new-cert', action='store_true', dest='newcert',
-                     default=False, help="Generate a new Fedora Certificate.")
+                      default=False, help="Generate a new Fedora Certificate.")
     parser.add_option('-f', '--file', action='store', dest='certfile',
-                     default=None, help="Verify Certificate.")
+                      default=None, help="User Certificate.")
     parser.add_option('-v', '--verify-cert', action='store_true', dest='verifycert',
-                     default=False, help="Verify Certificate.")
-    opts,args = parser.parse_args()
+                      default=False, help="Verify Certificate.")
+    opts, args = parser.parse_args()
 
     main(opts)
