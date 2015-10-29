@@ -1,5 +1,5 @@
 Name:           centos-packager
-Version:        0.2.0
+Version:        0.5.0
 Release:        1%{?dist}
 Summary:        Tools and files necessary for building CentOS packages
 Group:          Applications/Productivity
@@ -44,6 +44,11 @@ ln -sf %{_bindir}/koji %{buildroot}%{_bindir}/cbs
 %{_bindir}/centos_cert
 
 %changelog
+* Wed Oct 28 2015 brian@bstinson.com 0.5.0-1
+- The centos-cert utility now downloads the correct certificate, and sets up the
+  CA certificate properly
+- Updated the koji config to point to the downloaded certificates
+
 * Sun Jul 26 2015 brian@bstinson.com 0.2.0-1
 - Added the centos_cert utility
 - Remove the dep on centpkg 
