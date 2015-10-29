@@ -46,23 +46,26 @@ def download_cert(username, password, topurl=None, servercacert=None, uploadcace
     servercaurl = urlparse.urlunsplit(servercaspliturl)
 
     with open(os.path.expanduser(defaults.USER_CERT_FILE), 'w') as usercertfile:
-        r = requests.post(userurl, params=params, verify=False)
-        response = r.text
+        r = requests.post(userurl, params=params)
+        try:
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            print e.message
+            sys.exit(1)
 
-        if r.status_code <= 400:
-            usercertfile.write(response)
-        else:
-            print r.statuscode
-            print r.text
-            print os.path.expanduser(defaults.USER_CERT_FILE)
+        response = r.text
+        usercertfile.write(response)
 
     with open(os.path.expanduser(defaults.SERVER_CA_CERT_FILE), 'w') as servercacertfile:
-        r = requests.get(servercaurl, params=params, verify=False)
-        response = r.text
+        r = requests.get(servercaurl, params=params)
+        try:
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            print e.message
+            sys.exit(1)
 
-        if r.status_code <= 400:
-            servercacertfile.write(response)
-        print os.path.expanduser(defaults.SERVER_CA_CERT_FILE)
+        response = r.text
+        servercacertfile.write(response)
 
     # for now upload-ca.cert is the same as the server-ca cert. let's link them here
     if os.path.exists(os.path.expanduser(defaults.UPLOAD_CA_CERT_FILE)):
