@@ -1,5 +1,5 @@
 Name:           centos-packager
-Version:        0.5.0
+Version:        0.5.1
 Release:        1%{?dist}
 Summary:        Tools and files necessary for building CentOS packages
 Group:          Applications/Productivity
@@ -8,7 +8,7 @@ License:        GPLv2+
 URL:            http://www.centos.org
 Source0:        cbs-koji.conf
 Source1:        COPYING
-Source2:        centos_cert
+Source2:        centos-cert
 
 Requires:       koji
 Requires:       rpm-build rpmdevtools rpmlint
@@ -34,16 +34,20 @@ cp %{SOURCE1} .
 
 %{__mkdir_p} %{buildroot}/%{_bindir}
 ln -sf %{_bindir}/koji %{buildroot}%{_bindir}/cbs
-%{__install} -m 0755 %{SOURCE2} %{buildroot}%{_bindir}/centos_cert
+%{__install} -m 0755 %{SOURCE2} %{buildroot}%{_bindir}/centos-cert
 
 %files
 %defattr(-,root,root,-)
 %doc COPYING
 %config /etc/koji.conf.d/cbs-koji.conf
 %{_bindir}/cbs
-%{_bindir}/centos_cert
+%{_bindir}/centos-cert
 
 %changelog
+* Thu Oct 29 2015 brian@bstinson.com 0.5.1-1
+- Refactor to be more friendly if the http request fails
+- Move centos_cert to centos-cert
+
 * Wed Oct 28 2015 brian@bstinson.com 0.5.0-1
 - The centos-cert utility now downloads the correct certificate, and sets up the
   CA certificate properly
