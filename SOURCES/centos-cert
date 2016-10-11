@@ -74,6 +74,8 @@ def download_cert(username, password, topurl=None, servercacert=None, uploadcace
     os.symlink(os.path.expanduser(defaults.SERVER_CA_CERT_FILE),
                os.path.expanduser(defaults.UPLOAD_CA_CERT_FILE))
 
+    os.chmod(os.path.expanduser(defaults.USER_CERT_FILE), 0o600)
+
 
 def main(opts):
 

@@ -1,5 +1,5 @@
 Name:           centos-packager
-Version:        0.5.1
+Version:        0.5.3
 Release:        1%{?dist}
 Summary:        Tools and files necessary for building CentOS packages
 Group:          Applications/Productivity
@@ -44,6 +44,9 @@ ln -sf %{_bindir}/koji %{buildroot}%{_bindir}/cbs
 %{_bindir}/centos-cert
 
 %changelog
+* Tue Oct 11 2016 brian@bstinson.com 0.5.3-1
+- Rebuild to fix #12011
+
 * Tue Nov 10 2015 brian@bstinson.com 0.5.2-1
 - Fix a typo pointing to the ca-bundle in the cbs koji profile
 
