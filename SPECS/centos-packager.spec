@@ -44,6 +44,9 @@ ln -sf %{_bindir}/koji %{buildroot}%{_bindir}/cbs
 %{_bindir}/centos-cert
 
 %changelog
+* Tue Nov 10 2015 brian@bstinson.com 0.5.2-1
+- Fix a typo pointing to the ca-bundle in the cbs koji profile
+
 * Thu Oct 29 2015 brian@bstinson.com 0.5.1-1
 - Refactor to be more friendly if the http request fails
 - Move centos_cert to centos-cert
