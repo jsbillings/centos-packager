@@ -112,9 +112,9 @@ if __name__ == '__main__':
 
     parser = optparse.OptionParser(usage="%prog [OPTIONS] ")
     parser.add_option('-u', '--username', action='store', dest='username',
-                      default=False, help="FAS Username.")
+                      default=False, help="ACO Username.")
     parser.add_option('-n', '--new-cert', action='store_true', dest='newcert',
-                      default=False, help="Generate a new Fedora Certificate.")
+                      default=False, help="Generate a new User Certificate.")
     parser.add_option('-f', '--file', action='store', dest='certfile',
                       default=None, help="User Certificate.")
     parser.add_option('-v', '--verify-cert', action='store_true', dest='verifycert',
