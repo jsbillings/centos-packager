@@ -50,7 +50,9 @@ def download_cert(username, password, topurl=None, servercacert=None, uploadcace
         try:
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
-            print e.message
+            print("""Could not generate certificate!
+Response Code: {0}
+Message: {1}""".format(e.response.status_code, e.response.reason)).strip()
             sys.exit(1)
 
         response = r.text
@@ -61,7 +63,9 @@ def download_cert(username, password, topurl=None, servercacert=None, uploadcace
         try:
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
-            print e.message
+            print("""Could not download CA Certificate!
+Response Code: {0}
+Message: {1}""".format(e.response.status_code, e.response.reason)).strip()
             sys.exit(1)
 
         response = r.text
