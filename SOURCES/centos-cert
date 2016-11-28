@@ -109,7 +109,7 @@ def main(opts):
             sys.exit(0)
 
     if opts.newcert:
-        password = getpass('FAS Password: ')
+        password = getpass('ACO Password: ')
         download_cert(username, password)
 
 if __name__ == '__main__':
