@@ -1,5 +1,5 @@
 Name:           centos-packager
-Version:        0.5.3
+Version:        0.5.5
 Release:        1%{?dist}
 Summary:        Tools and files necessary for building CentOS packages
 Group:          Applications/Productivity
@@ -44,6 +44,14 @@ ln -sf %{_bindir}/koji %{buildroot}%{_bindir}/cbs
 %{_bindir}/centos-cert
 
 %changelog
+* Mon Nov 28 2016 brian@bstinson.com 0.5.5-1
+- Update more references to ACO
+- Make sure Exception messages don't print credentials to the screen
+
+* Thu Oct 20 2016 brian@bstinson.com 0.5.4-1
+- Update to point at the trust ca-bundle.crt #12110
+- Update the help text to mention ACO
+
 * Tue Oct 11 2016 brian@bstinson.com 0.5.3-1
 - Rebuild to fix #12011
 
