@@ -5,7 +5,7 @@ Summary:        Tools and files necessary for building CentOS packages
 Group:          Applications/Productivity
 
 License:        GPLv2+
-URL:            http://www.centos.org
+URL:            https://github.com/bstinsonmhk/centos-packager
 Source0:        cbs-koji.conf
 Source1:        COPYING
 Source2:        centos-cert
