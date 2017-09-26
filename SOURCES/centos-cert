@@ -14,15 +14,9 @@ from centos import CentOSUserCert
 from centos import defaults
 
 
-def download_cert(username, password, topurl=None, servercacert=None, uploadcacert=None):
+def download_cert(username, password, topurl=None):
     if not topurl:
         topurl = defaults.FAS_TOPURL
-
-    if not servercacert:
-        servercacert = defaults.SERVER_CA_CERT_FILE
-
-    if not uploadcacert:
-        uploadcacert = defaults.UPLOAD_CA_CERT_FILE
 
     splittopurl = urlparse.urlsplit(topurl)
 
