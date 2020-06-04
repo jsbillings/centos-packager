@@ -1,11 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import os
 import pwd
 import sys
 import optparse
-import urlparse
+import urllib.parse
 import requests
 
 from getpass import getpass
@@ -18,35 +18,35 @@ def download_cert(username, password, topurl=None):
     if not topurl:
         topurl = defaults.FAS_TOPURL
 
-    splittopurl = urlparse.urlsplit(topurl)
+    splittopurl = urllib.parse.urlsplit(topurl)
 
     usercertpath = os.path.join(splittopurl.path, 'user/dogencert')
     params = {'user_name': username, 'password': password, 'login': 'Login'}
 
-    userspliturl = urlparse.SplitResult(splittopurl.scheme,
+    userspliturl = urllib.parse.SplitResult(splittopurl.scheme,
                                         splittopurl.netloc,
                                         usercertpath,
                                         None,
                                         None)
 
     servercapath = os.path.join(splittopurl.path, 'ca/ca-cert.pem')
-    servercaspliturl = urlparse.SplitResult(splittopurl.scheme,
+    servercaspliturl = urllib.parse.SplitResult(splittopurl.scheme,
                                             splittopurl.netloc,
                                             servercapath,
                                             None,
                                             None)
 
-    userurl = urlparse.urlunsplit(userspliturl)
-    servercaurl = urlparse.urlunsplit(servercaspliturl)
+    userurl = urllib.parse.urlunsplit(userspliturl)
+    servercaurl = urllib.parse.urlunsplit(servercaspliturl)
 
     with open(os.path.expanduser(defaults.USER_CERT_FILE), 'w') as usercertfile:
         r = requests.post(userurl, params=params)
         try:
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
-            print("""Could not generate certificate!
+            print(("""Could not generate certificate!
 Response Code: {0}
-Message: {1}""".format(e.response.status_code, e.response.reason)).strip()
+Message: {1}""".format(e.response.status_code, e.response.reason)).strip())
             sys.exit(1)
 
         response = r.text
@@ -57,9 +57,9 @@ Message: {1}""".format(e.response.status_code, e.response.reason)).strip()
         try:
             r.raise_for_status()
         except requests.exceptions.HTTPError as e:
-            print("""Could not download CA Certificate!
+            print(("""Could not download CA Certificate!
 Response Code: {0}
-Message: {1}""".format(e.response.status_code, e.response.reason)).strip()
+Message: {1}""".format(e.response.status_code, e.response.reason)).strip())
             sys.exit(1)
 
         response = r.text
@@ -88,18 +88,18 @@ def main(opts):
         try:
             cert = CentOSUserCert(certfile)
             username = cert.CN
-        except IOError, e:
+        except IOError as e:
             if opts.verifycert:
-                print "{0}: {1}".format(os.path.expanduser(certfile), e.strerror)
+                print("{0}: {1}".format(os.path.expanduser(certfile), e.strerror))
                 exit(1)
             username = pwd.getpwuid(os.geteuid())[0]
 
     if opts.verifycert:
         if not cert.valid:
-            print "Your certificate is not valid"
+            print("Your certificate is not valid")
             sys.exit(1)
         else:
-            print "Your certificate is valid"
+            print("Your certificate is valid")
             sys.exit(0)
 
     if opts.newcert:
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     opts, args = parser.parse_args()
 
     if not opts.newcert and not opts.verifycert:
-        print "Must specify one of arguments: -v or -n"
+        print("Must specify one of arguments: -v or -n")
         parser.print_help()
         sys.exit(1)
 

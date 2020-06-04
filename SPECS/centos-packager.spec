@@ -1,11 +1,11 @@
 Name:           centos-packager
 Version:        0.5.5
-Release:        1%{?dist}
+Release:        2.1%{?dist}
 Summary:        Tools and files necessary for building CentOS packages
 Group:          Applications/Productivity
 
 License:        GPLv2+
-URL:            https://github.com/bstinsonmhk/centos-packager
+URL:            https://git.centos.org/centos/centos-packager
 Source0:        cbs-koji.conf
 Source1:        COPYING
 Source2:        centos-cert
@@ -44,6 +44,12 @@ ln -sf %{_bindir}/koji %{buildroot}%{_bindir}/cbs
 %{_bindir}/centos-cert
 
 %changelog
+* Wed Jun 03 2020 Jonathan Billings <jsbillings@jsbillings.org> - 0.5.5-2.1
+- Ported to Python 3
+
+* Wed Jul 19 2017 brian@bstinson.com 0.5.5-2
+- Bumpspec to rebuild for F26
+
 * Mon Nov 28 2016 brian@bstinson.com 0.5.5-1
 - Update more references to ACO
 - Make sure Exception messages don't print credentials to the screen
